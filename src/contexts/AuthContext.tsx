@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
   isAuthenticated: boolean;
   username: string | null;
+  login: (username: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   username: null,
+  login: () => {},
   logout: () => {},
 });
 
@@ -35,6 +37,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  const login = (user: string) => {
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('user', user);
+    setIsAuthenticated(true);
+    setUsername(user);
+  };
+
   const logout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');
@@ -46,6 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value = {
     isAuthenticated,
     username,
+    login,
     logout,
   };
 

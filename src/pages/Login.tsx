@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -27,12 +26,12 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
 
   // If already authenticated, redirect to home page
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -54,9 +53,8 @@ const Login = () => {
       );
 
       if (user) {
-        // Store authentication state in localStorage
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("user", values.email);
+        // Use the login function from AuthContext to handle authentication
+        login(values.email);
         
         // Show success toast
         toast.success("Login successful!");
