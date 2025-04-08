@@ -9,6 +9,10 @@ import PrivateRoute from "./components/PrivateRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import FeaturesPage from "./pages/Features";
+import AboutPage from "./pages/About";
+import TestimonialsPage from "./pages/TestimonialsPage";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +25,38 @@ const AppContent = () => (
         element={
           <PrivateRoute>
             <Index />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/features" 
+        element={
+          <PrivateRoute>
+            <FeaturesPage />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/about" 
+        element={
+          <PrivateRoute>
+            <AboutPage />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/testimonials" 
+        element={
+          <PrivateRoute>
+            <TestimonialsPage />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/contact" 
+        element={
+          <PrivateRoute>
+            <Contact />
           </PrivateRoute>
         } 
       />
