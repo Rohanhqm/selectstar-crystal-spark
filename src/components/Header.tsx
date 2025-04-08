@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { username, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +40,21 @@ const Header = () => {
             <a href="#about" className="text-gray-700 hover:text-dpurple transition-colors">About</a>
             <a href="#testimonials" className="text-gray-700 hover:text-dpurple transition-colors">Testimonials</a>
             <Button className="bg-gradient-hero hover:opacity-90 transition-opacity">Contact Us</Button>
+            
+            {username && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Hello, {username}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={logout}
+                  className="flex items-center gap-1"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </Button>
+              </div>
+            )}
           </nav>
           
           {/* Mobile Menu Button */}
@@ -83,6 +100,23 @@ const Header = () => {
               >
                 Contact Us
               </Button>
+              
+              {username && (
+                <div className="pt-2 border-t border-gray-200">
+                  <div className="mb-2 text-sm">Hello, {username}</div>
+                  <Button 
+                    variant="outline" 
+                    className="w-full flex items-center justify-center gap-2"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         )}
