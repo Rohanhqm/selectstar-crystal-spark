@@ -1,0 +1,94 @@
+
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
+
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
+    }`}>
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center">
+            <a href="/" className="flex items-center">
+              <span className="text-2xl font-bold text-dblue">D-Crystal</span>
+            </a>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#features" className="text-gray-700 hover:text-dpurple transition-colors">Features</a>
+            <a href="#about" className="text-gray-700 hover:text-dpurple transition-colors">About</a>
+            <a href="#testimonials" className="text-gray-700 hover:text-dpurple transition-colors">Testimonials</a>
+            <Button className="bg-gradient-hero hover:opacity-90 transition-opacity">Contact Us</Button>
+          </nav>
+          
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-md text-gray-700"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white absolute left-0 right-0 top-16 shadow-lg animate-fade-in">
+            <div className="px-4 py-6 space-y-4">
+              <a 
+                href="#features" 
+                className="block text-gray-700 hover:text-dpurple transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </a>
+              <a 
+                href="#about" 
+                className="block text-gray-700 hover:text-dpurple transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                About
+              </a>
+              <a 
+                href="#testimonials" 
+                className="block text-gray-700 hover:text-dpurple transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Testimonials
+              </a>
+              <Button 
+                className="w-full bg-gradient-hero hover:opacity-90 transition-opacity" 
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact Us
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+};
+
+export default Header;
