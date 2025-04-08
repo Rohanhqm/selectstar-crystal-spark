@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useAuth } from '@/contexts/AuthContext';
 
 // Define allowed users
 const ALLOWED_USERS = [
@@ -26,6 +27,14 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  // If already authenticated, redirect to home page
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -49,9 +58,11 @@ const Login = () => {
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("user", values.email);
         
-        // Redirect to home page
-        navigate("/");
+        // Show success toast
         toast.success("Login successful!");
+        
+        // Redirect to home page after successful login
+        navigate("/", { replace: true });
       } else {
         toast.error("Invalid email or password");
       }
