@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, UserRound } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
+      isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white/80 backdrop-blur-sm'
     }`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -45,18 +45,22 @@ const Header = () => {
             <Link to="/features" className={`${isActive('/features')} hover:text-dpurple transition-colors`}>Features</Link>
             <Link to="/about" className={`${isActive('/about')} hover:text-dpurple transition-colors`}>About</Link>
             <Link to="/testimonials" className={`${isActive('/testimonials')} hover:text-dpurple transition-colors`}>Testimonials</Link>
-            <Button className="bg-gradient-hero hover:opacity-90 transition-opacity" asChild>
-              <Link to="/contact">Contact Us</Link>
-            </Button>
             
-            {username && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Hello, {username}</span>
+            {!username ? (
+              <Button className="bg-gradient-hero hover:opacity-90 transition-opacity" asChild>
+                <Link to="/contact">Contact Us</Link>
+              </Button>
+            ) : (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 bg-gray-100 rounded-full py-1 px-3">
+                  <UserRound size={18} className="text-gray-600" />
+                  <span className="text-sm font-medium text-gray-800">{username}</span>
+                </div>
                 <Button 
-                  variant="ghost" 
+                  variant="outline" 
                   size="sm" 
                   onClick={logout}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 border-red-200 text-red-600 hover:bg-red-50"
                 >
                   <LogOut size={16} />
                   Logout
@@ -102,20 +106,24 @@ const Header = () => {
               >
                 Testimonials
               </Link>
-              <Button 
-                className="w-full bg-gradient-hero hover:opacity-90 transition-opacity" 
-                onClick={() => setMobileMenuOpen(false)}
-                asChild
-              >
-                <Link to="/contact">Contact Us</Link>
-              </Button>
               
-              {username && (
+              {!username ? (
+                <Button 
+                  className="w-full bg-gradient-hero hover:opacity-90 transition-opacity" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  asChild
+                >
+                  <Link to="/contact">Contact Us</Link>
+                </Button>
+              ) : (
                 <div className="pt-2 border-t border-gray-200">
-                  <div className="mb-2 text-sm">Hello, {username}</div>
+                  <div className="mb-3 flex items-center gap-2 py-2">
+                    <UserRound size={18} className="text-gray-600" />
+                    <span className="font-medium text-gray-800">{username}</span>
+                  </div>
                   <Button 
                     variant="outline" 
-                    className="w-full flex items-center justify-center gap-2"
+                    className="w-full flex items-center justify-center gap-2 border-red-200 text-red-600 hover:bg-red-50"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       logout();
