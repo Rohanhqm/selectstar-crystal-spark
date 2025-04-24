@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -9,16 +10,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAuth } from '@/contexts/AuthContext';
-
-// Define allowed users
-const ALLOWED_USERS = [
-  { email: "rohan", password: "test@123" },
-  { email: "punith", password: "test@1234" }
-];
+import { supabase } from '@/integrations/supabase/client';
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Email is required"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -28,7 +24,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { isAuthenticated, login } = useAuth();
 
-  // If already authenticated, redirect to home page
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/", { replace: true });
@@ -43,30 +38,44 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values: LoginFormValues) => {
+  const onSubmit = async (values: LoginFormValues) => {
     setLoading(true);
     
-    // Simulate API call with setTimeout
-    setTimeout(() => {
-      const user = ALLOWED_USERS.find(
-        (user) => user.email === values.email && user.password === values.password
-      );
-
-      if (user) {
-        // Use the login function from AuthContext to handle authentication
-        login(values.email);
-        
-        // Show success toast
-        toast.success("Login successful!");
-        
-        // Redirect to home page after successful login
-        navigate("/", { replace: true });
-      } else {
-        toast.error("Invalid email or password");
-      }
+    try {
+      const { error } = await login(values.email, values.password);
       
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Login successful!");
+        navigate("/", { replace: true });
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  const handleSignUp = async (values: LoginFormValues) => {
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Signup successful! Please check your email to verify your account.");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,7 +85,7 @@ const Login = () => {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
             <CardDescription className="text-center">
-              Enter your credentials to access the application
+              Enter your email and password to access your account
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -89,7 +98,7 @@ const Login = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your email" {...field} />
+                        <Input type="email" placeholder="Enter your email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -108,19 +117,23 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing in..." : "Sign in"}
-                </Button>
+                <div className="space-y-2">
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Processing..." : "Sign in"}
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="w-full"
+                    disabled={loading}
+                    onClick={form.handleSubmit(handleSignUp)}
+                  >
+                    Sign up
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col">
-            <div className="text-center text-sm text-muted-foreground mt-2">
-              <p>Allowed Users (for testing):</p>
-              <p>Email: rohan | Password: test@123</p>
-              <p>Email: punith | Password: test@1234</p>
-            </div>
-          </CardFooter>
         </Card>
       </div>
     </div>
