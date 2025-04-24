@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -25,19 +25,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [username, setUsername] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const fetchUsername = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', userId)
+      .single();
+    
+    if (data && !error) {
+      setUsername(data.username);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setIsAuthenticated(!!session);
-        setUsername(session?.user?.email ?? null);
+        if (session?.user) {
+          await fetchUsername(session.user.id);
+        } else {
+          setUsername(null);
+        }
       }
     );
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
-      setUsername(session?.user?.email ?? null);
+      if (session?.user) {
+        fetchUsername(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
