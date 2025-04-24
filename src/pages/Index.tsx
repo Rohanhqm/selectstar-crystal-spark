@@ -39,22 +39,6 @@ const Index = () => {
         <Features />
         <About />
         <Testimonials />
-        
-        {/* Logout Button Section */}
-        {username && (
-          <section className="container mx-auto px-4 md:px-6 py-8">
-            <div className="flex justify-center">
-              <Button 
-                variant="destructive" 
-                onClick={logout} 
-                className="flex items-center gap-2"
-              >
-                <LogOut size={16} />
-                Logout
-              </Button>
-            </div>
-          </section>
-        )}
       </main>
       <Footer />
     </div>
