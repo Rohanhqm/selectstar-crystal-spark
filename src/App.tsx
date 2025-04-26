@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +12,8 @@ import FeaturesPage from "./pages/Features";
 import AboutPage from "./pages/About";
 import TestimonialsPage from "./pages/TestimonialsPage";
 import Contact from "./pages/Contact";
+import DataCatalog from "./pages/DataCatalog";
+import DataLineage from "./pages/DataLineage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,22 @@ const AppContent = () => (
         element={
           <PrivateRoute>
             <Index />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/data-catalog" 
+        element={
+          <PrivateRoute>
+            <DataCatalog />
+          </PrivateRoute>
+        } 
+      />
+      <Route 
+        path="/data-lineage" 
+        element={
+          <PrivateRoute>
+            <DataLineage />
           </PrivateRoute>
         } 
       />
