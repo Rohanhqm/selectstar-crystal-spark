@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FilePdf } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 interface PdfViewerProps {
   pdfUrl: string;
@@ -17,7 +17,7 @@ const PdfViewer = ({ pdfUrl }: PdfViewerProps) => {
         />
       ) : (
         <div className="flex flex-col items-center text-gray-500">
-          <FilePdf size={48} />
+          <FileText size={48} />
           <p className="mt-2">No PDF selected</p>
         </div>
       )}
