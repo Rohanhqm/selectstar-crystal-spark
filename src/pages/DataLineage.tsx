@@ -11,8 +11,8 @@ const DataLineage = () => {
       <Header />
       <div className="pt-16 h-[calc(100vh-4rem)]">
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={50}>
-            <PdfViewer pdfUrl="/data-lineage.pdf" />
+          <ResizablePanel defaultSize={60}>
+            <PdfViewer pdfUrl="/copilot.pdf" />
           </ResizablePanel>
           
           <ResizableHandle withHandle />

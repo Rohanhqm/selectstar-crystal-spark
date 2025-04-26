@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { FileText, AlertCircle, FilePdf, FileExcel } from 'lucide-react';
+import { FileText, AlertCircle, File, FileSpreadsheet } from 'lucide-react';
 
 interface PdfViewerProps {
   pdfUrl: string;
@@ -67,10 +67,10 @@ const PdfViewer = ({ pdfUrl }: PdfViewerProps) => {
     const fileType = getFileType(pdfUrl);
     switch (fileType) {
       case 'pdf':
-        return <FilePdf size={48} />;
+        return <File size={48} />;
       case 'xlsx':
       case 'xls':
-        return <FileExcel size={48} />;
+        return <FileSpreadsheet size={48} />;
       default:
         return <FileText size={48} />;
     }

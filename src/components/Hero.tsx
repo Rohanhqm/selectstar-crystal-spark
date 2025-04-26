@@ -43,9 +43,10 @@ const Hero = () => {
             <div className="glass-card p-2">
               <div className="relative rounded-xl overflow-hidden aspect-video">
                 <img 
-                  src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                  // src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                  src="/hero_img.jpeg" 
                   alt="Crystal research technology" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full"
                 />
               </div>
             </div>
