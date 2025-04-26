@@ -9,7 +9,7 @@ const DataCatalog = () => {
     <div className="min-h-screen">
       <Header />
       <div className="pt-16">
-        <PdfViewer pdfUrl="/data-catalog.pdf" />
+        <PdfViewer pdfUrl="/copilot.pdf" />
       </div>
       <Footer />
     </div>
