@@ -17,8 +17,9 @@ const PdfViewer = ({ pdfUrl }: PdfViewerProps) => {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center p-4">
       {pdfUrl && !pdfError ? (
-        <iframe
+        <embed
           src={pdfUrl}
+          type="application/pdf"
           className="w-full h-full border-0 rounded-lg shadow-lg"
           title="PDF Viewer"
           onError={handleError}
